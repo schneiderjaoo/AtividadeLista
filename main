@@ -1,1 +1,108 @@
 
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class Meme {
+  final String name;
+  final String genre;
+  final String imagePath;
+
+  Meme({
+    required this.name,
+    required this.genre,
+    required this.imagePath,
+  });
+}
+
+class WelcomeScreen extends StatelessWidget {
+  final VoidCallback onButtonPressed;
+
+  const WelcomeScreen({required this.onButtonPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Bem-vindo a Lista de Memes'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'Welcome to the Mato!',
+              style: TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: onButtonPressed,
+              child: const Text('Ver Lista de Memes'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  final List<Meme> memes = [
+    Meme(name: 'Meme 1 ', genre: 'Qualidade Alpha', imagePath: 'assets/img.jpg'),
+    Meme(
+        name: 'Meme 2',
+        genre: 'Qualidade Plus',
+        imagePath: 'assets/img2jpg'),
+    Meme(
+        name: 'Meme 3',
+        genre: 'Qualidade',
+        imagePath: 'assets/img3jpg'),
+    // Adicione mais jogos conforme necessário
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => WelcomeScreen(
+              onButtonPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MemeListScreen(Memes: memes),
+                  ),
+                );
+              },
+            ),
+      },
+    );
+  }
+}
+
+class MemeListScreen extends StatelessWidget {
+  final List<Meme> Memes;
+
+  const MemeListScreen({required this.Memes});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Lista de Jogos'),
+      ),
+      body: ListView.builder(
+        itemCount: Memes.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Image.asset(Memes[index].imagePath),
+            title: Text(Memes[index].name),
+            subtitle: Text(Memes[index].genre),
+          );
+        },
+      ),
+    );
+  }
+}
